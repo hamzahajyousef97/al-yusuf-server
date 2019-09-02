@@ -7,6 +7,7 @@ const cors = require('./cors');
 const Products = require('../models/product');
 const productRouter = express.Router();
 productRouter.use(bodyParser.json());
+const fs = require('fs')
 
 const multer = require('multer');
 
@@ -84,8 +85,7 @@ productRouter.route('/:productId')
 .get(cors.cors, (req,res,next) => {
     Products.findById(req.params.productId)
     .then((product) => {
-        console.log('product created', product);
-        res.statusCode =200;
+        res.statusCode = 200;
         res.setHeader('Content-Type', 'application/json');
         res.json(product);
     }, (err) => next(err))
@@ -279,5 +279,30 @@ productRouter.route('/:productId/images/:imageId')
     }, (err) => next(err))
     .catch((err) => next(err));
 });
+
+// productRouter.route('/:productId/images/:imageFile/delete')
+// .options(cors.corsWithOptions, (req, res) => { res.sendStatus(200); })
+// .delete(cors.corsWithOptions, authenticate.verifyUser, authenticate.verifyAdmin, (req,res,next) => {
+//     Products.findById(req.params.productId)
+//     .then((product) => {
+//         if (product != null) {
+//             var path = './public/' + imageFile;
+//             console.log(path);
+//             try {
+//                 fs.unlinkSync(path)
+//                 //file removed
+//             } catch(err) {
+//                 console.error(err)
+//             }
+//         }
+//         else {
+//             err = new Error('product ' + req.params.productId + ' not found ');
+//             err.status = 404;
+//             return next(err);
+//         }
+//     }, (err) => next(err))
+//     .catch((err) => next(err));
+// });
+
 
 module.exports = productRouter;
